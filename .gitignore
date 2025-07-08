@@ -27,8 +27,8 @@ yarn-error.log
 !/storage/logs
 
 # Ignore all files inside cache/sessions/views
-/storage/framework/cache/*
-!/storage/framework/cache/.gitignore
+# /storage/framework/cache/*
+# !/storage/framework/cache/.gitignore
 
 /storage/framework/sessions/*
 !/storage/framework/sessions/.gitignore

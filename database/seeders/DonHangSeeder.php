@@ -17,8 +17,8 @@ class DonHangSeeder extends Seeder
         $now = now();
 
         // Kiểm tra nếu chưa có dữ liệu mới insert
-        if (DB::table('DonHang')->count() === 0) {
-            DB::table('DonHang')->insert([
+        if (DB::table('donhang')->count() === 0) {
+            DB::table('donhang')->insert([
                 [
                     'id' => 1,
                     'maDonHang' => 'DH' . $now->format('YmdHis'),

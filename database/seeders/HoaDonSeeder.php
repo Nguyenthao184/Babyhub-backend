@@ -11,7 +11,7 @@ class HoaDonSeeder extends Seeder
 {
     public function run(): void
     {
-        $donHangs = DB::table('DonHang')->take(6)->get(); // Lấy 6 đơn hàng đầu tiên
+        $donHangs = DB::table('donhang')->take(6)->get(); // Lấy 6 đơn hàng đầu tiên
 
         $hoaDons = [];
         $now = Carbon::now();
