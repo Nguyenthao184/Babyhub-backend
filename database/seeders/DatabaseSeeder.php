@@ -30,6 +30,5 @@ class DatabaseSeeder extends Seeder
         $this->call(DonHangSeeder::class);
         $this->call(ChiTietDonHangSeeder::class);
         $this->call(HoaDonSeeder::class);
-
     }
 }
