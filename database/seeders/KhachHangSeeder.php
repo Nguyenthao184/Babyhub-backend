@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class KhachHangSeeder extends Seeder
@@ -13,17 +12,35 @@ class KhachHangSeeder extends Seeder
      */
     public function run(): void
     {
-                // Lấy id TaiKhoan của khách
-        $taiKhoanId = DB::table('TaiKhoan')->where('email', 'khach@example.com')->value('id');
+        $emails = [
+            'khach@example.com',
+            'khach2@example.com',
+            'khach3@example.com',
+        ];
+        $names = [
+            'Nguyễn Văn An',
+            'Trần Thị Bích',
+            'Lê Hữu Phúc',
+        ];
 
-        DB::table('KhachHang')->insert([
-            'hoTen' => 'Khách hàng mẫu',
-            'sdt' => '0123456789',
-            'email' => 'khach@example.com',
-            'diaChi' => 'Số 1 Đường ABC',
-            'ngaySinh' => '1990-01-01',
-            'taiKhoan_id' => $taiKhoanId,
-        ]);
 
+        $datas = [];
+
+        foreach ($emails as $key => $email) {
+            $taiKhoanId = DB::table('TaiKhoan')->where('email', $email)->value('id');
+
+            if ($taiKhoanId) {
+                $datas[] = [
+                    'hoTen' => $names[$key],
+                    'sdt' => '01234567' . sprintf('%02d', $key + 10),
+                    'email' => $email,
+                    'diaChi' => 'Số ' . ($key + 1) . ' Đường ABC',
+                    'ngaySinh' => '1990-0' . ($key + 1) . '-01',
+                    'taiKhoan_id' => $taiKhoanId,
+                ];
+            }
+        }
+
+        DB::table('KhachHang')->insert($datas);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\NhaCungCap;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,14 +22,16 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Seed kho data
-        $this->call(KhoSeeder::class);
+        //$this->call(KhoSeeder::class);
         $this->call(TaiKhoanSeeder::class);
         $this->call(KhachHangSeeder::class);
+        $this->call(NhaCungCapSeeder::class);
         $this->call(DanhMucSeeder::class);
         $this->call(SanPhamSeeder::class);
-        $this->call(CuaHangSeeder::class);
         $this->call(DonHangSeeder::class);
         $this->call(ChiTietDonHangSeeder::class);
         $this->call(HoaDonSeeder::class);
+        $this->call(PhieuNhapKhoSeeder::class);
+        $this->call(ChiTietPhieuNhapKhoSeeder::class);
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\DonHang;
 use App\Models\HoaDon;
 use App\Models\ChiTietDonHang;
+use App\Models\SanPham;
 
 class DonHangController extends Controller
 {
@@ -41,7 +42,6 @@ class DonHangController extends Controller
             $donHang = DonHang::create([
                 'maDonHang' => 'DH' . now()->format('YmdHis'),
                 'khachHang_id' => $request->khachHang_id,
-                'cuaHang_id' => $request->cuaHang_id,
                 'trangThai' => 'completed',
                 'ngayTao' => now(),
                 'ngayCapNhat' => now(),
@@ -62,6 +62,23 @@ class DonHangController extends Controller
                     'giamGia' => $giamGia,
                     'tongTien' => $tongTien,
                 ]);
+                
+                // Trừ kho
+                $sanPham = SanPham::find($item['id']);
+                if (!$sanPham) {
+                    DB::rollBack();
+                    return response()->json(['error' => 'Không tìm thấy sản phẩm.'], 404);
+                }
+
+                if ($sanPham->soLuongTon < $soLuong) {
+                    DB::rollBack();
+                    return response()->json([
+                        'error' => 'Không đủ hàng tồn kho cho sản phẩm ' . $sanPham->ten
+                    ], 400);
+                }
+
+                $sanPham->soLuongTon -= $soLuong;
+                $sanPham->save();
             }
 
             // 3. Tạo hóa đơn

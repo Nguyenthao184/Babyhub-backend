@@ -14,6 +14,7 @@ class SanPham extends Model
 
     protected $fillable = [
         'id',
+        'maSanPham',
         'tenSanPham',
         'maSKU',
         'VAT',
@@ -21,16 +22,18 @@ class SanPham extends Model
         'soLuongTon',
         'moTa',
         'danhMuc_id',
-        'kho_id',
+        //'kho_id',
         'hinhAnh',
         'ngayTao',
         'ngayCapNhat',
+        'is_noi_bat',
     ];
 
     protected $casts = [
         'VAT' => 'decimal:2',
         'ngayTao' => 'datetime',
         'ngayCapNhat' => 'datetime',
+        'thongSoKyThuat' => 'array',
     ];
 
     protected static function boot()
@@ -44,6 +47,11 @@ class SanPham extends Model
             if (empty($model->ngayTao)) {
                 $model->ngayTao = now();
             }
+            if (empty($model->maSanPham)) {
+                $latest = self::orderBy('maSanPham', 'desc')->first();
+                $nextNumber = $latest ? ((int)substr($latest->maSanPham, 2)) + 1 : 1;
+                $model->maSanPham = 'SP' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        }
         });
 
         static::updating(function ($model) {
@@ -62,8 +70,8 @@ class SanPham extends Model
     /**
      * Relationship with Kho
      */
-    public function kho()
-    {
-        return $this->belongsTo(Kho::class, 'kho_id', 'id');
-    }
+    // public function kho()
+    // {
+    //     return $this->belongsTo(Kho::class, 'kho_id', 'id');
+    // }
 }

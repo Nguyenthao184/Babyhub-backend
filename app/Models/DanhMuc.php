@@ -14,12 +14,13 @@ class DanhMuc extends Model
 
         protected $fillable = [
         'id',
+        'maDanhMuc',
         'tenDanhMuc',
         'moTa',
         'soLuongSanPham',
         'hinhAnh',
         'nhaCungCap',
-        'idKho',
+        //'idKho',
     ];
 
     protected $casts = [
@@ -34,6 +35,11 @@ class DanhMuc extends Model
             if (empty($model->id)) {
                 $model->id = (string) Str::uuid();
             }
+            if (empty($model->maDanhMuc)) {
+            $latest = self::orderBy('maDanhMuc', 'desc')->first();
+            $nextNumber = $latest ? ((int)substr($latest->maDanhMuc, 2)) + 1 : 1;
+            $model->maDanhMuc = 'DM' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        }
         });
     }
 
@@ -44,12 +50,15 @@ class DanhMuc extends Model
     {
         return $this->hasMany(SanPham::class, 'danhMuc_id', 'id');
     }
-
+    public function nhaCungCap()
+    {
+        return $this->belongsTo(NhaCungCap::class, 'nhaCungCap', 'id');
+    }
     /**
      * Relationship with Kho
      */
-    public function kho()
-    {
-        return $this->belongsTo(Kho::class, 'idKho', 'id');
-    }
+    // public function kho()
+    // {
+    //     return $this->belongsTo(Kho::class, 'idKho', 'id');
+    // }
 }
