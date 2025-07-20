@@ -7,6 +7,7 @@ use App\Models\HoaDon;
 use Illuminate\Support\Facades\DB;
 use App\Models\ChiTietDonHang;
 use App\Models\SanPham;
+use App\Http\Requests\HoaDon\UpdateHoaDonRequest;
 
 class HoaDonController extends Controller
 {
@@ -64,11 +65,12 @@ class HoaDonController extends Controller
     /**
      * Cập nhật thông tin hóa đơn
      */
-    public function update(Request $request, $id)
+    public function update(UpdateHoaDonRequest $request, $id)
     {
         DB::beginTransaction();
 
         try {
+            $data = $request->validated(); 
             $hoaDon = HoaDon::findOrFail($id);
             $donHang = $hoaDon->donHang;
 
@@ -96,7 +98,7 @@ class HoaDonController extends Controller
                 foreach ($chiTiets as $chiTiet) {
                     $sanPham = SanPham::find($chiTiet->sanpham_id);
                     if ($sanPham) {
-                        $sanPham->soLuong += $chiTiet->soLuong;
+                        $sanPham->soLuongTon  += $chiTiet->soLuong;
                         $sanPham->save();
                     }
                 }
@@ -121,15 +123,15 @@ class HoaDonController extends Controller
                     $chenhLech = $soLuongMoi - $soLuongCu;
 
                     if ($chenhLech > 0) {
-                        if ($sanPham->soLuong < $chenhLech) {
+                        if ($sanPham->soLuongTon < $chenhLech) {
                             DB::rollBack();
                             return response()->json([
-                                'error' => 'Không đủ hàng tồn kho cho sản phẩm ' . $sanPham->ten
+                                'error' => 'Không đủ hàng tồn kho cho sản phẩm ' . $sanPham->tenSanPham
                             ], 400);
                         }
-                        $sanPham->soLuong -= $chenhLech;
+                        $sanPham->soLuongTon  -= $chenhLech;
                     } elseif ($chenhLech < 0) {
-                        $sanPham->soLuong += abs($chenhLech);
+                        $sanPham->soLuongTon  += abs($chenhLech);
                     }
 
                     $sanPham->save();

@@ -22,6 +22,7 @@ class ChiTietPhieuKiemKho extends Model
     }
      public function sanPham()
     {
-        return $this->belongsTo(SanPham::class, 'san_pham_id', 'id');
+        return $this->belongsTo(SanPham::class, 'san_pham_id');
     }
+   
 }
